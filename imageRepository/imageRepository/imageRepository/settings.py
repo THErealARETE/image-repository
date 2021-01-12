@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'repo',
     'rest_framework',
+    'taggit',
+    'taggit_serializer'
 ]
 
 MIDDLEWARE = [
@@ -111,8 +114,9 @@ REST_FRAMEWORK = {
 
     # Permission Settings
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-        'rest_framework.permissions.IsAuthenticated',   
+        'rest_framework.permissions.AllowAny',
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        # 'rest_framework.permissions.IsAuthenticated',   
     ),
     # Authentication settings
     'DEFAULT_AUTHENTICATION_CLASSES': (
