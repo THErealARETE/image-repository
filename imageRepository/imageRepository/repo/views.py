@@ -41,21 +41,41 @@ class ImageViewSet(viewsets.ModelViewSet):
         data = request.data 
 
         print(data)
-        # j_data = json.dumps(data.tags)
-        # print(j_data)
+        print([data['tags']])
+        look = json.dumps([data['tags']])
+        print(look)
+
+        # tags_type = type(data("tags"))
         new_image_data = dict(
             image = data['image'],  
             title = data['title'],
             is_public = data['public'],
-            tags = json.dumps(data['tags'])
-        )
+            # tags = ["tag1", "tag2"]
+            tags = look
+            # tags = data["tags"].replace(" ' ", " " ")
+            # tags = ['tag': str(["xyz"]).replace("'", '"')]
+        )   
         print(new_image_data)
 
         serializer = ImageSerializer(data = new_image_data)
+        print(serializer)
         if serializer.is_valid():
-            obj = serializer.save(commit = False)
-            obj.save()
-            serializer.save_m2m()
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
+
+    # def update(self, request, pk = None):
+    #     queryset = Images.objects.all()
+    #     data = request.data
+
+    #     image = get_object_or_404(queryset , pk = pk)
+    #     serializer = ImageSerializer()
+    #     updated_image = serializer.update(image , data)
+    #     return response(
+    #         data = {
+    #             ImageSerializer(updated_image).data,
+    #             status = status.HTTP_200_OK
+    #         }
+    #     )
+

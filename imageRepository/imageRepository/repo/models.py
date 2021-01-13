@@ -11,6 +11,6 @@ class Images(models.Model):
     is_public = models.BooleanField(default= True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    tags = TaggableManager(help_text= 'Add tags to your images', blank= True)
+    tags = TaggableManager(blank= True , help_text= 'Add tags to your images' )
 
     
