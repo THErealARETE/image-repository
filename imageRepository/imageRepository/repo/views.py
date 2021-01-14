@@ -65,17 +65,41 @@ class ImageViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
 
-    # def update(self, request, pk = None):
+    def list(self , request):
+        queryset = Images.objects.all()
+        serializer = ImageSerializer(queryset , many = True)
+        return Response( serializer.data , status = status.HTTP_200_OK )
+
+
+    def retrieve(self, request, pk = None):
+        queryset = Images.objects.all()
+        single_image = get_object_or_404(queryset, pk = pk )
+        serializer = ImageSerializer(single_image)
+        return Response(serializer.data, 
+        status = status.HTTP_200_OK)
+
+
+    # def update(self, request, *args, *kwargs):
+    #     queryset = Images.objects.all()
+    #     data = request.data 
+
+    #     update_info = Images.objects.get()
+
+    # def partial_update(self, request, pk = None):
     #     queryset = Images.objects.all()
     #     data = request.data
+    #     print(data)
+    #     image_to_update = get_object_or_404(queryset , pk = pk)
+    #     print(image_to_update)
 
-    #     image = get_object_or_404(queryset , pk = pk)
-    #     serializer = ImageSerializer()
-    #     updated_image = serializer.update(image , data)
-    #     return response(
-    #         data = {
-    #             ImageSerializer(updated_image).data,
-    #             status = status.HTTP_200_OK
-    #         }
-    #     )
 
+    #     serializer = ImageSerializer(image_to_update, data , partial = True)
+    #     print(serializer.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data , status = status.HTTP_200_OK)
+    #     return Response( serializer.errors , status=status.HTTP_400_BAD_REQUEST)    
+        # updated_image = serializer.data
+        # # updated_image = serializer(image_to_update).data
+        # return Response( updated_image , status=status.HTTP_200_OK)
+    
