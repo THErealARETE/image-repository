@@ -6,6 +6,7 @@ from taggit.managers import TaggableManager
 
 class Images(models.Model):
     image_id = models.AutoField(primary_key=True)
+    image_name = models.CharField( max_length= 250, verbose_name= 'image name', default = "New Image")
     image = models.ImageField(upload_to = 'image_bank',verbose_name= 'image')
     title = models.CharField(max_length= 250, verbose_name= 'image title/description')
     is_public = models.BooleanField(default= True)

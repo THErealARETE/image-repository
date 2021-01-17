@@ -8,6 +8,12 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.response import Response
 
+from .permissions import IsAdminUser, IsOwner 
+
+from rest_framework.permissions import IsAuthenticated
+
+from rest_framework.decorators import action
+
 from rest_framework import viewsets,exceptions
 
 from rest_framework.views import status
@@ -36,6 +42,14 @@ class ImageViewSet(viewsets.ModelViewSet):
 
     serializer_class = Images
     queryset = Images.objects.all()
+
+
+    def get_permissions(self):
+        permission_classes = [IsAuthenticated, ]
+        if self.action in ('create','destroy', 'update'):
+            permission_classes = [IsOwner]
+        return [permission() for permission in permission_classes]
+        
 
     def create(self, request):
         data = request.data 
@@ -78,28 +92,42 @@ class ImageViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, 
         status = status.HTTP_200_OK)
 
+    def update(self, request, pk = None):
+        # image_object = self.get_object()
+        queryset = Images.objects.all()
+        data = request.data
 
-    # def update(self, request, *args, *kwargs):
-    #     queryset = Images.objects.all()
-    #     data = request.data 
+        # if Images.DoesNotExist:
+        #     return Response(
+        #         data = {
+        #             "message": "Image with id: {} does not exist".format(pk)
+        #         }, status=status.HTTP_404_NOT_FOUND
+        #     )
+        # else:     
+        new_image = get_object_or_404(queryset , pk = pk)
+        serializer = ImageSerializer()
+        updated_image = serializer.update(new_image , data)
+        return Response(ImageSerializer(updated_image).data
+                    # status=status.HTTP_OK_200
+                    )
 
-    #     update_info = Images.objects.get()
 
-    # def partial_update(self, request, pk = None):
-    #     queryset = Images.objects.all()
-    #     data = request.data
-    #     print(data)
-    #     image_to_update = get_object_or_404(queryset , pk = pk)
-    #     print(image_to_update)
+    def partial_update(self, request, pk = None):
+        queryset = Images.objects.all()
+        data = request.data
+
+        partial_update_image = get_object_or_404(queryset, pk = pk)
+        serializer = ImageSerializer()
+        updated_image = serializer.update(partial_update_image, data)
+        return Response(ImageSerializer(updated_image).data)
 
 
-    #     serializer = ImageSerializer(image_to_update, data , partial = True)
-    #     print(serializer.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data , status = status.HTTP_200_OK)
-    #     return Response( serializer.errors , status=status.HTTP_400_BAD_REQUEST)    
-        # updated_image = serializer.data
-        # # updated_image = serializer(image_to_update).data
-        # return Response( updated_image , status=status.HTTP_200_OK)
-    
+    def destroy(self, request, pk = None):
+        queryset = Images.objects.all()
+        data = request.data
+
+        delete_image = get_object_or_404(queryset, pk = pk)
+        almost_delete_image = self.perform_destroy(delete_image)
+        # serializer = ImageSerializer()
+        # almost_delete_image = serializer.perform_destroy(delete_image)
+        return Response(status=status.HTTP_204_NO_CONTENT)
