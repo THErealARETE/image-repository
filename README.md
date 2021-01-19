@@ -3,7 +3,7 @@ Shopify Intership Application
 
 
 
-Here i built an Image Repository, built with Django Framework(PYTHON), hoted on Heroku.  It's Functinality are as follows:
+Here i built an Image Repository, built with Django Framework(PYTHON), hoted on Heroku(link in the about section).  It's Functinality are as follows:
 
 *Add Images ( Each image having an image name, image descrition, tags, public Permission)
 
