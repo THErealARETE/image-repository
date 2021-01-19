@@ -32,8 +32,16 @@ https://infinite-inlet-66910.herokuapp.com/api/auth/login/  To Login
 https://infinite-inlet-66910.herokuapp.com/api/
 """
     POST image/
+    
+    
     GET image/
+    
+    
     GET image/:pk/
+    
+    
     PUT image/:pk/
+    
+    
     DELETE image/:pk/
     """
